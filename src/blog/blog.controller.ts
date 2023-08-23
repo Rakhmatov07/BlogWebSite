@@ -3,24 +3,27 @@ import {
   Get,
   Post,
   Body,
+  Req,
   Patch,
   Param,
   Delete,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { BlogService } from './blog.service';
-import { CreateBlogDto } from './dto/create-blog.dto';
-import { UpdateBlogDto } from './dto/update-blog.dto';
+import { CreateBlogDto, UpdateBlogDto } from './dto'
 import { IBlog } from 'src/models/blog.model';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { IRequest } from 'src/shared/types/request.type';
 
+@UseGuards(AuthGuard)
 @Controller('blog')
 export class BlogController {
-  constructor(private readonly blogService: BlogService) {}
+  constructor(private readonly blogService: BlogService) { }
 
   @Post()
-  async create(@Body() createBlogDto: CreateBlogDto) {
-    const newBlog = await this.blogService.create(createBlogDto);
-    return { message: 'Success', newBlog };
+  create(@Body() createBlogDto: CreateBlogDto, @Req() req: IRequest) {
+    return this.blogService.create(createBlogDto, req);
   }
 
   @Get()
@@ -29,7 +32,7 @@ export class BlogController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<IBlog> {
+  async findOne(@Param('id') id: string): Promise<IBlog> {
     const blog = await this.blogService.findOne(id);
 
     if (!blog) {
@@ -40,7 +43,7 @@ export class BlogController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateBlogDto: UpdateBlogDto) {
+  async update(@Param('id') id: string, @Body() updateBlogDto: UpdateBlogDto) {
     const updatedBlog = await this.blogService.update(id, updateBlogDto);
 
     if (updatedBlog) {
@@ -51,8 +54,7 @@ export class BlogController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number) {
-    await this.blogService.remove(id);
-    return { message: 'Blog deleted successfully' };
+  remove(@Param('id') id: string) {  
+    return this.blogService.remove(id);
   }
 }

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "e1dfd0bf-7576-4c13-9c65-70a8c0c03a7e",
+    "firstname": "Ali",
+    "lastname": "Hakimov",
+    "email": "joi123@gmail.com",
+    "password": "$argon2id$v=19$m=65536,t=3,p=4$y9bMcJlr4VXHNwLSV1GTqg$WOm+64pSVuCnFjjm+LK0fmCvxXYmw5OOuK+HoKmrlPc",
+    "createdAt": "2023-08-23T12:42:24.227Z"
+  }
+]
